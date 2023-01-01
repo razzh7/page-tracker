@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js"
   },
   "keywords": [
