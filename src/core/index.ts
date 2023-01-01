@@ -26,7 +26,7 @@ export default class Tracker {
       historyTracker: false,
       hashTracker: false,
       domTracker: false,
-      jsError: false,
+      jsError: false
     }
   }
 
@@ -35,6 +35,10 @@ export default class Tracker {
       this.captureEvents(['popstate'], 'history-pv')
       this.captureEvents(['pushState'], 'history-pv')
       this.captureEvents(['replaceState'], 'history-pv')
+    }
+
+    if (this.data.hashTracker) {
+      this.captureEvents(['hashchange'], 'hash-pv')
     }
   }
 
@@ -46,9 +50,8 @@ export default class Tracker {
    */
   private captureEvents<T>(MouseEventList: string[], targetKey: string, data?: T) {
     MouseEventList.forEach((eventName) => {
-      console.log('eventName', eventName)
-
       window.addEventListener(eventName, () => {
+        console.log('cur event', eventName)
         this.reportTracker({ eventName, targetKey, data })
       })
     })
@@ -57,7 +60,7 @@ export default class Tracker {
   private reportTracker<T>(data: T) {
     const params = Object.assign(this.data, data, { time: new Date().getTime() })
     let headers = {
-      type: 'application/x-www-form-urlencoded',
+      type: 'application/x-www-form-urlencoded'
     }
     // Blob 用法：https://developer.mozilla.org/zh-CN/docs/Web/API/Blob
     let blob = new Blob([JSON.stringify(params)], headers)
