@@ -7,12 +7,14 @@
     <title>Tracker Page</title>
   </head>
   <body>
+    <button target-key="btn">DOM EVENT</button>
     <script src="./dist/index.js"></script>
     <script>
       new tracker({
         requestUrl: 'https://localhost:3001',
         historyTracker: true,
-        hashTracker: true
+        hashTracker: true,
+        domTracker: true
       })
     </script>
   </body>

@@ -26,3 +26,9 @@ export enum TrackerConfig {
 export interface Options extends Partial<DefaultOptions> {
   requestUrl: string
 }
+
+export interface reportTracker {
+  [key: string]: any
+  eventName: string
+  targetKey: string
+}

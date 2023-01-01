@@ -1,6 +1,15 @@
-import { DefaultOptions, Options, TrackerConfig } from '../types/core'
+import { DefaultOptions, Options, TrackerConfig, reportTracker } from '../types/core'
 import { createHistoryEvent } from '../util/pv'
 
+const MouseEventList: string[] = [
+  'click',
+  'dblclick',
+  'contextmenu',
+  'mouseup',
+  'mouseenter',
+  'mouseout',
+  'mouseover'
+]
 export default class Tracker {
   public data: Options
   public version: string | undefined
@@ -31,14 +40,21 @@ export default class Tracker {
   }
 
   private installTracker() {
+    // History API
     if (this.data.historyTracker) {
       this.captureEvents(['popstate'], 'history-pv')
       this.captureEvents(['pushState'], 'history-pv')
       this.captureEvents(['replaceState'], 'history-pv')
     }
 
+    // Hash
     if (this.data.hashTracker) {
       this.captureEvents(['hashchange'], 'hash-pv')
+    }
+
+    // DOM Event
+    if (this.data.domTracker) {
+      this.captureDomEvents()
     }
   }
 
@@ -51,10 +67,29 @@ export default class Tracker {
   private captureEvents<T>(MouseEventList: string[], targetKey: string, data?: T) {
     MouseEventList.forEach((eventName) => {
       window.addEventListener(eventName, () => {
-        console.log('cur event', eventName)
         this.reportTracker({ eventName, targetKey, data })
       })
     })
+  }
+
+  private captureDomEvents() {
+    MouseEventList.forEach((event) => {
+      window.addEventListener(event, (e) => {
+        const target = (window.event || e).target as HTMLElement
+        const targetKey = target.getAttribute('target-key')
+
+        if (targetKey) {
+          this.sendReport({
+            eventName: event,
+            targetKey
+          })
+        }
+      })
+    })
+  }
+
+  private sendReport(data: reportTracker) {
+    this.reportTracker(data)
   }
 
   private reportTracker<T>(data: T) {
