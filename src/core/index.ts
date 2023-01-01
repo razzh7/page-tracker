@@ -56,6 +56,11 @@ export default class Tracker {
     if (this.data.domTracker) {
       this.captureDomEvents()
     }
+
+    // JSError
+    if (this.data.jsError) {
+      this.jsError()
+    }
   }
 
   /**
@@ -72,6 +77,7 @@ export default class Tracker {
     })
   }
 
+  // 捕获 DOM 事件，并上报
   private captureDomEvents() {
     MouseEventList.forEach((event) => {
       window.addEventListener(event, (e) => {
@@ -84,6 +90,34 @@ export default class Tracker {
             targetKey
           })
         }
+      })
+    })
+  }
+
+  // 捕获 JS Error 并上报
+  private jsError() {
+    this.eventError()
+    this.promiseError()
+  }
+
+  private eventError() {
+    window.addEventListener('error', (event) => {
+      this.sendReport({
+        eventName: 'jsError',
+        targetKey: 'message',
+        errorContent: event.message
+      })
+    })
+  }
+
+  private promiseError() {
+    window.addEventListener('unhandledrejection', (event) => {
+      event.promise.catch((error) => {
+        this.sendReport({
+          targetKey: 'reject',
+          eventName: 'promise',
+          message: error
+        })
       })
     })
   }

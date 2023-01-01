@@ -8,13 +8,21 @@
   </head>
   <body>
     <button target-key="btn">DOM EVENT</button>
+    <button id="button">按钮</button>
     <script src="./dist/index.js"></script>
     <script>
+      const btn = document.getElementById('button')
+      btn.addEventListener('click', () => {
+        // error
+        fnc()
+      })
+
       new tracker({
         requestUrl: 'https://localhost:3001',
         historyTracker: true,
         hashTracker: true,
-        domTracker: true
+        domTracker: true,
+        jsError: true
       })
     </script>
   </body>
