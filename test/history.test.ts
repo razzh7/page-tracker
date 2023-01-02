@@ -1,4 +1,5 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest'
+import { useParams } from './util'
 import Tracker from '../src/core'
 
 // Mock navigator.sendBeacon
@@ -6,13 +7,6 @@ Object.assign(navigator, {
   sendBeacon: vi.fn()
 })
 let tracker: any
-const useParams = <T>(eventName: string, targetKey: string, data?: T) => {
-  return {
-    eventName,
-    targetKey,
-    data
-  }
-}
 describe('use historyTracker option', () => {
   beforeEach(() => {
     tracker = new Tracker({
