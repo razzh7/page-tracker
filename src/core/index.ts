@@ -18,7 +18,6 @@ export default class Tracker {
     this.data = Object.assign(this.initDef(), options)
     // 监听事件
     this.installTracker()
-    console.log('执行')
   }
 
   private initDef(): DefaultOptions {
@@ -126,7 +125,7 @@ export default class Tracker {
     })
   }
 
-  private sendReport(data: reportTracker) {
+  public sendReport(data: reportTracker) {
     this.reportTracker(data)
   }
 
