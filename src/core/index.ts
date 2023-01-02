@@ -39,6 +39,10 @@ export default class Tracker {
     }
   }
 
+  public setUserId(id: string) {
+    this.data.uuid = id
+  }
+
   private installTracker() {
     // History API
     if (this.data.historyTracker) {
